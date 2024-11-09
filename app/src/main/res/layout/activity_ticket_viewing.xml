@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HomeTicketer">
+
+    <!-- Non-scrollable TextView -->
+    <TextView
+        android:id="@+id/staticTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LBTMO TICKET CREDENTIALS"
+        android:textSize="18sp"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppinsbold"
+        android:maxLines="1"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:src="@drawable/triangle_shape"
+        android:elevation="-4dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="-100dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="-300dp"
+        android:background="@drawable/circular_border"
+        android:elevation="1dp"
+        android:foregroundGravity="center"
+        android:src="@drawable/logo_medium" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <ScrollView
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/CardView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="10dp"
+                    android:padding="16dp">
+
+                    <!-- Main Content Layout inside CardView -->
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="30dp"
+                        android:rowCount="13"
+                        android:columnCount="2"
+                        android:layout_gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnSpan="2"
+                            android:text=" Ticket ID: 123456789"
+                            android:padding="12dp"
+                            android:textSize="16sp"
+                            android:layout_marginTop="30dp"
+                            android:fontFamily="@font/poppinsbold"
+                            android:layout_gravity="center"/>
+
+
+                        <TextView
+                            android:id="@+id/lastnameTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Last Name"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/firstnameTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="First Name"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/miTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Middle Initial"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/dateTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Select Date"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/addressTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Address"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/licenseTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="License Number"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/municipalityTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Municipality: Los Baños"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/vehicleTypeTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Vehicle Type"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/plateNumberTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Plate Number"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/regNumberTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Registration Number"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/vehicleNumberTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Vehicle Number"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/checkboxOption1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Confiscated License"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/violationTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Violation"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/barangayTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Barangay"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <TextView
+                            android:id="@+id/streetTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Street"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsbold"/>
+
+                        <!-- Buttons Layout -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_columnSpan="2">
+
+                            <Button
+                                android:id="@+id/goBackButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Edit"
+                                android:backgroundTint="@color/navy_blue"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@color/white"/>
+
+                            <Button
+                                android:id="@+id/printTicketButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Print Ticket"
+                                android:layout_marginStart="15dp"
+                                android:backgroundTint="@color/navy_blue"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@color/white"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                />
+                        </LinearLayout>
+
+                    </GridLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

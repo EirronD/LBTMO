@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="violations">
+        <item>Speeding</item>
+        <item>Running a red light</item>
+        <item>Illegal parking</item>
+        <item>Reckless driving</item>
+        <item>No seatbelt</item>
+        <item>Driving under influence</item>
+    </string-array>
+</resources>

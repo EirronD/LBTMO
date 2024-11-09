@@ -1,0 +1,99 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ticket Details"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppinsbold" />
+
+    <TextView
+        android:id="@+id/ticketIdDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsregular"  />
+
+    <TextView
+        android:id="@+id/ticketDescriptionDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ticket Description"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsregular" />
+
+    <TextView
+        android:id="@+id/dateTimeDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date-Time"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsregular" />
+
+    <!-- Name Fields in One Line -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsregular" >
+
+        <TextView
+            android:id="@+id/firstNameDetailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="First Name"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppinsregular" />
+
+        <TextView
+            android:id="@+id/lastNameDetailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Name"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppinsregular"
+            /> <!-- Add margin for spacing -->
+
+        <TextView
+            android:id="@+id/middleNameDetailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Middle Name"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppinsregular" /> <!-- Add margin for spacing -->
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/plateLicenseDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plate License"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsregular" />
+
+    <TextView
+        android:id="@+id/barangayDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Barangay"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsregular" />
+
+    <TextView
+        android:id="@+id/streetDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Street"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsregular" />
+</LinearLayout>

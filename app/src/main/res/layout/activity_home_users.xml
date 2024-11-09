@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeUsers">
+
+
+    <TextView
+        android:id="@+id/titletextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        android:elevation="5dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/poppinsbold"
+        android:textColor="@color/white"/>
+    <!-- ScrollView to make the content scrollable -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            tools:context=".HomeUsers">
+
+            <!-- Header Text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:elevation="5dp"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/poppinsbold"
+                android:textColor="@color/white"/>
+
+            <!-- Welcome Message -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Welcome Users!"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="50dp"
+                android:gravity="center_horizontal"
+                android:fontFamily="@font/poppinsbold"/>
+
+            <!-- GridLayout for Violations Information -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:columnCount="2"
+                android:rowCount="1"
+                android:orientation="horizontal">
+
+                <!-- CardView for Pending Violations -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    android:layout_columnWeight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/violatorsNow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pending Violations"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:ellipsize="end"/>
+
+                        <TextView
+                            android:id="@+id/violatorsCountNow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- CardView for Total Violations -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    android:layout_columnWeight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/violationsYesterday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="My Total Violations"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:ellipsize="end"/>
+
+                        <TextView
+                            android:id="@+id/violationsCountYesterday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </GridLayout>
+
+            <!-- CardView for Recent Violation Details -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:columnCount="1">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    android:layout_columnWeight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Header for Recent Violation -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="My Recent Violation"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:gravity="center_horizontal"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- Violation Type -->
+                        <TextView
+                            android:id="@+id/violationType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Violation Type: Overspeeding"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:layout_marginBottom="4dp" />
+
+                        <!-- Violation Date and Time -->
+                        <TextView
+                            android:id="@+id/violationDateTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Date: Oct 28, 2024 14:30"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/poppinsregular"
+                            android:layout_marginBottom="4dp" />
+
+                        <!-- Location Information -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+
+                            <!-- Street TextView -->
+                            <TextView
+                                android:id="@+id/violationStreet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Main St."
+                                android:textSize="14sp"
+                                android:fontFamily="@font/poppinsregular"/>
+
+                            <!-- Separator TextView for comma and space -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=", "
+                                android:textSize="14sp"
+                                android:fontFamily="@font/poppinsregular"/>
+
+                            <!-- Barangay TextView -->
+                            <TextView
+                                android:id="@+id/violationBarangay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Barangay Maahas"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/poppinsregular"/>
+
+                            <!-- Separator TextView for comma and space -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=", "
+                                android:textSize="14sp"
+                                android:fontFamily="@font/poppinsregular"/>
+
+                            <!-- Municipality TextView -->
+                            <TextView
+                                android:id="@+id/violationMunicipality"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Los Baños"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/poppinsregular"/>
+                        </LinearLayout>
+
+                        <!-- Status TextView -->
+                        <TextView
+                            android:id="@+id/violationStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Status: Not Paid"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:textStyle="bold"/>
+
+                        <!-- Fallback Message if No Violations Found -->
+                        <LinearLayout
+                            android:id="@+id/noViolationsLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/noViolationsImage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/tickets"
+                                android:layout_gravity="center" />
+
+                            <TextView
+                                android:id="@+id/noViolationsMessage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="You currently have no recorded violations."
+                                android:textSize="14sp"
+                                android:gravity="center_horizontal"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/poppinsmedium"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </GridLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reminder: If you have violations. Please pay your pending violations within 3 days at the municipality of Los Baños."
+                android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/poppinsregular"/>
+
+            <!-- Welcome Message -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Traffic Guidelines"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:fontFamily="@font/poppinsbold"/>
+
+            <!-- Horizontal Recycler View -->
+            <androidx.recyclerview.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/horizontal_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"/>
+
+
+            <!-- CardView for Announcements -->
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:columnCount="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Announcement Header -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Announcement"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- Announcement Content -->
+                        <TextView
+                            android:id="@+id/announcementContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Stay updated on the latest traffic guidelines in Los Baños. Drive safely!"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/poppinsregular"
+                            android:layout_marginBottom="8dp" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </GridLayout>
+            <!-- Contact Us Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ask help and Contact us at:"
+                android:textSize="14sp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/poppinsregular"/>
+
+
+            <TextView
+                android:id="@+id/emailLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="support@losbanos.gov.ph"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppinsregular"
+                android:autoLink="email"
+                android:linksClickable="true" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/activity_main_content" />
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/user_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

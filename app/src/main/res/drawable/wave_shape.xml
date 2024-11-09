@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="120dp"
+    android:viewportWidth="360"
+    android:viewportHeight="120">
+
+    <!-- Define 20 waves upside down at the bottom -->
+    <path
+        android:fillColor="@color/navy_blue"
+        android:pathData="M0,60
+                         L0,120
+                         Q9,90 18,120
+                         T36,120
+                         Q45,90 54,120
+                         T72,120
+                         Q81,90 90,120
+                         T108,120
+                         Q117,90 126,120
+                         T144,120
+                         Q153,90 162,120
+                         T180,120
+                         Q189,90 198,120
+                         T216,120
+                         Q225,90 234,120
+                         T252,120
+                         Q261,90 270,120
+                         T288,120
+                         Q297,90 306,120
+                         T324,120
+                         Q333,90 342,120
+                         T360,120
+                         L360,60
+                         L0,60 Z"/>
+</vector>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"> <!-- Add a background color here -->
+
+    <!-- Close button in the top right corner -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/buttonCloseDialog"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_close_24"
+            android:contentDescription="Close dialog" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Profile Picture"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppinsbold"
+        android:layout_marginTop="16dp" />
+
+    <ImageView
+        android:id="@+id/imageViewProfile"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/picture_placeholder"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/buttonChooseFromGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Gallery"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsbold"
+        android:backgroundTint="@color/navy_blue"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/baseline_gallery_24"
+        />
+
+    <Button
+        android:id="@+id/buttonTakePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Camera"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppinsbold"
+        android:backgroundTint="@color/navy_blue"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/baseline_camera_alt_24"/>
+</LinearLayout>

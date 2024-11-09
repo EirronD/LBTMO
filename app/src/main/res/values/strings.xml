@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">TicketingSystem</string>
+    <string name="title_activity_issue_ticket">IssueTicket</string>
+    <string name="title_activity_issue_tickets">IssueTickets</string>
+
+    <string-array name="ViolationList">
+        <item> Illegal Parking</item>
+        <item>Obstruction</item>
+        <item>Abandonment of Motor Vehicle</item>
+        <item>Disregarding Traffic Lights and Signs</item>
+        <item>Reckless Driving</item>
+    </string-array>
+    <string-array name="Barangay">
+        <item>Barangay 1</item>
+        <item>Barangay 2</item>
+        <item>Barangay 3</item>
+        <item>Barangay 4</item>
+        <item>Barangay 5</item>
+    </string-array>
+    <string-array name="Street">
+        <item>Street 1</item>
+        <item>Street 2</item>
+        <item>Street 3</item>
+    </string-array>
+</resources>

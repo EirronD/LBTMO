@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "571052594134",
+    "firebase_url": "https://lbtmo-f849a-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "lbtmo-f849a",
+    "storage_bucket": "lbtmo-f849a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571052594134:android:fbdb44267bec2f0def0a77",
+        "android_client_info": {
+          "package_name": "com.example.ticketingsystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD20Bqb_4CIEfOgohxoF1ULicpSDg-cVRw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

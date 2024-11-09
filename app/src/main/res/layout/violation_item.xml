@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <!-- Replace with the content of each item -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/violationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Violation Title"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppinsbold"/>
+
+
+        <!-- Name Fields in One Line -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:columnCount="3">
+
+            <TextView
+                android:id="@+id/firstNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Name"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_columnWeight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:padding="2dp"
+                android:maxWidth="80dp"/>
+
+            <TextView
+                android:id="@+id/lastNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Name"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_marginStart="8dp"
+                android:layout_columnWeight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:padding="2dp"
+                android:maxWidth="80dp"/> <!-- Add margin for spacing -->
+
+            <TextView
+                android:id="@+id/middleNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Middle Name"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_marginStart="8dp"
+                android:layout_columnWeight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:padding="2dp"
+                android:maxWidth="50dp"/> <!-- Add margin for spacing -->
+
+        </GridLayout>
+
+        <!-- Location Information -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:columnCount="3"
+            >
+
+            <!-- Street TextView -->
+            <TextView
+                android:id="@+id/violationStreet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Main St."
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_columnWeight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:padding="2dp"
+                android:maxWidth="50dp"
+                />
+
+            <!-- Barangay TextView -->
+            <TextView
+                android:id="@+id/violationBarangay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Barangay Maahas"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_columnWeight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:padding="2dp"
+                android:maxWidth="100dp"
+                />
+
+            <!-- Municipality TextView -->
+            <TextView
+                android:id="@+id/violationMunicipality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Los Baños"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_columnWeight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:padding="2dp"
+                android:maxWidth="50dp"/>
+        </GridLayout>
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2">
+            <TextView
+                android:id="@+id/dateTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date-Time"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_columnWeight="1"
+                android:padding="2dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unpaid"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsbold"
+                android:layout_marginStart="8dp"
+                android:layout_columnWeight="1"
+                android:padding="2dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
+        </GridLayout>
+
+
+        <!-- Add other TextViews or UI elements as needed -->
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
