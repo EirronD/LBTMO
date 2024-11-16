@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Email"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Close Button -->
+        <ImageButton
+            android:id="@+id/buttonClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/baseline_close_24"
+            android:contentDescription="Close"/>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/editTextAddGmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Add Email"
+        android:fontFamily="@font/poppinsregular"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/editTextConfirmOTP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="OTP"
+        android:fontFamily="@font/poppinsregular"
+        android:maxLines="1" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/buttonOTP"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Send OTP"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/navy_blue"
+            android:fontFamily="@font/poppinsbold"
+            android:maxLines="1"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/baseline_password_24white"
+            android:textSize="13sp"
+            android:ellipsize="end"
+            android:maxEms="6"/>
+
+        <Button
+            android:id="@+id/buttonAddEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add Email"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/navy_blue"
+            android:fontFamily="@font/poppinsbold"
+            android:maxLines="1"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/baseline_email_24white"
+            android:textSize="13sp"
+            android:ellipsize="end"
+            android:maxEms="6"/>
+    </LinearLayout>
+
+
+</LinearLayout>
