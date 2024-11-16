@@ -20,60 +20,96 @@
         android:fontFamily="@font/poppinsbold"
         android:textColor="@color/white"
         />
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="60dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="16dp">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/main"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="60dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp">
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/violationsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- ImageView for no violations with specified size -->
+            <ImageView
+                android:id="@+id/noViolationsImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/checkmark"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
+            <!-- TextView for no violations message -->
+            <TextView
+                android:id="@+id/noViolationsMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No violations found"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/noViolationsSubMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Congratulations"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+        <!-- Loading Indicator -->
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/loadingIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/violationsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:nestedScrollingEnabled="false" />
-
-        <!-- ImageView for no violations with specified size -->
-        <ImageView
-            android:id="@+id/noViolationsImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/checkmark"
-            android:visibility="gone"
-            android:layout_gravity="center" />
-
-        <!-- TextView for no violations message -->
-        <TextView
-            android:id="@+id/noViolationsMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No violations found"
-            android:visibility="gone"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noInternetAnimation"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/noint"
             android:layout_gravity="center"
-            android:textStyle="bold"/>
-
+            android:visibility="gone"
+            />
+        <!-- TextView for "No Internet" message -->
         <TextView
-            android:id="@+id/noViolationsSubMessage"
+            android:id="@+id/noInternetMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Congratulations"
+            android:text="You have no internet."
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_marginTop="40dp"
             android:visibility="gone"
-            android:layout_gravity="center" />
+            android:fontFamily="@font/poppinsbold"/>
 
-    </LinearLayout>
+    </FrameLayout>
+
+
 
     <include layout="@layout/activity_main_content" />
 

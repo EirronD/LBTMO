@@ -4,8 +4,35 @@
     <color name="white">#FFFFFFFF</color>
     <color name="cyan">#c0f0f7</color>
     <color name="cyan_btn">#67e2f4</color>
-    <color name="grey">#FF808080</color> <!-- Added grey color -->
+    <color name="grey">#DDDDDD</color> <!-- Added grey color -->
     <color name="hintTextColor">#FF808080</color>
     <color name="light_gray">#D3D3D3</color>
     <color name="navy_blue">#000080</color>
+    <color name="test">#B0E0E6</color>
+
+    <!-- Doughtnut-->
+    <color name="color2">#FF8D1A</color>
+    <color name="color3">#FFC300</color>
+    <color name="color5">#C70039</color>
+    <color name="color6">#900C3F</color>
+    <color name="color7">#DAF7A6</color>
+    <color name="color8">#FFC0CB</color>
+    <color name="color9">#FFD700</color>
+    <color name="color10">#00FF7F</color>
+    <color name="color11">#1E90FF</color>
+    <color name="color13">#7CFC00</color>
+    <color name="color14">#8A2BE2</color>
+    <array name="doughnut_colors">
+        <item>@color/color2</item>
+        <item>@color/color3</item>
+        <item>@color/color5</item>
+        <item>@color/color6</item>
+        <item>@color/color7</item>
+        <item>@color/color8</item>
+        <item>@color/color9</item>
+        <item>@color/color10</item>
+        <item>@color/color11</item>
+        <item>@color/color13</item>
+        <item>@color/color14</item>
+    </array>
 </resources>

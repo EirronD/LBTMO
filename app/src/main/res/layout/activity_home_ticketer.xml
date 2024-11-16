@@ -19,172 +19,215 @@
         android:fontFamily="@font/poppinsbold"
         android:textColor="@color/white"
         />
-
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/main"
+        <ScrollView
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                tools:context=".HomeTicketer">
+
+                <!-- Welcome Message -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome Ticketer"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="80dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/poppinsbold"/>
+
+                <!-- Most Violations Text -->
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:columnCount="2"
+                    android:rowCount="1"
+                    android:orientation="horizontal">
+
+                    <!-- CardView 1 for Violators As of Now -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/violatorsNow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Violators As of Now"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:fontFamily="@font/poppinsmedium"
+                                android:ellipsize="end"/>
+
+                            <TextView
+                                android:id="@+id/violatorsCountNow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp"
+                                />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- CardView 2 for Violations As of Yesterday -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/violationsYesterday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Violations Yesterday"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:fontFamily="@font/poppinsmedium"
+                                android:ellipsize="end"/>
+
+                            <TextView
+                                android:id="@+id/violationsCountYesterday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </GridLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="start"
+                    android:text="Most Places Where Violation Occurred"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Most Violated Violations By Code"
+                    android:fontFamily="@font/poppinsbold"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"
+                    android:gravity="start"
+                    android:maxLines="2"
+                    android:ellipsize="end"/>
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/doughnutChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="16dp" />
+
+                <!-- Contact Us Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ask help and Contact us at:"
+                    android:textSize="14sp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/poppinsregular"/>
+
+
+                <TextView
+                    android:id="@+id/emailLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="lbtmoticketsystem@gmail.com"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_blue_dark"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:autoLink="email"
+                    android:linksClickable="true" />
+
+            </LinearLayout>
+        </ScrollView>
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            tools:context=".HomeTicketer">
+            android:layout_gravity="center"
+            android:visibility="gone" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noInternetAnimation"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/noint"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+        <!-- TextView for "No Internet" message -->
+        <TextView
+            android:id="@+id/noInternetMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You have no internet."
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_marginTop="40dp"
+            android:visibility="gone"
+            android:fontFamily="@font/poppinsbold"/>
 
-            <!-- Welcome Message -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Welcome Ticketer"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="80dp"
-                android:gravity="center_horizontal"
-                android:fontFamily="@font/poppinsbold"/>
+    </FrameLayout>
 
-            <!-- Most Violations Text -->
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:columnCount="2"
-                android:rowCount="1"
-                android:orientation="horizontal">
-
-                <!-- CardView 1 for Violators As of Now -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    android:layout_columnWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:id="@+id/violatorsNow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Violators As of Now"
-                            android:textSize="11sp"
-                            android:textStyle="bold"
-                            android:maxLines="1"
-                            android:fontFamily="@font/poppinsmedium"
-                            android:ellipsize="end"/>
-
-                        <TextView
-                            android:id="@+id/violatorsCountNow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="8dp"
-                            />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- CardView 2 for Violations As of Yesterday -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    android:layout_columnWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:id="@+id/violationsYesterday"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Violations Yesterday"
-                            android:textSize="11sp"
-                            android:textStyle="bold"
-                            android:maxLines="1"
-                            android:fontFamily="@font/poppinsmedium"
-                            android:ellipsize="end"/>
-
-                        <TextView
-                            android:id="@+id/violationsCountYesterday"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="8dp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </GridLayout>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="start"
-                android:text="Most Places Where Violation Occurred"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/poppinsmedium"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChart"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Most Violated Violations"
-                android:fontFamily="@font/poppinsbold"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:gravity="start"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/doughnutChart"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp" />
-
-            <Button
-                android:id="@+id/issueTicketBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="24dp"
-                android:backgroundTint="@color/navy_blue"
-                android:text="Issue Tickets"
-                android:textColor="@color/white"
-                android:fontFamily="@font/poppinsbold"/>
-
-        </LinearLayout>
-    </ScrollView>
 
     <!-- Drawer Layout -->
     <include layout="@layout/activity_main_content" />

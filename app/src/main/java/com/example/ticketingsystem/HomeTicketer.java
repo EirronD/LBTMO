@@ -248,7 +248,6 @@ public class HomeTicketer extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int violationCount = 0;
 
-                // Iterate through each violation
                 for (DataSnapshot violationSnapshot : snapshot.getChildren()) {
                     violationCount++;
                 }

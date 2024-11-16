@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ticketingsystem"
+    namespace = "com.lbtmo.ticketingsystem"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.ticketingsystem"
+        applicationId = "com.lbtmo.ticketingsystem"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -82,8 +82,14 @@ dependencies {
     implementation ("com.sun.mail:android-activation:1.6.6")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.google.firebase:firebase-auth")
-    implementation ("com.google.firebase:firebase-storage:20.0.0")
     implementation ("com.google.android.material:material:1.9.0")
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("com.google.firebase:firebase-storage:20.1.0")
+
+    implementation ("com.google.mlkit:text-recognition:16.0.0")
+    implementation ("com.google.android.gms:play-services-mlkit-text-recognition:18.0.2")
+
+    implementation ("com.airbnb.android:lottie:6.1.0")
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
 }

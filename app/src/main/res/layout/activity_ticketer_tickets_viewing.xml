@@ -18,32 +18,28 @@
         android:fontFamily="@font/poppinsbold"
         android:textColor="@color/white"
         />
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"> <!-- Center contents vertically and horizontally -->
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ticketRecyclerView"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/main"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:nestedScrollingEnabled="false"
-            android:layout_marginTop="60dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"> <!-- Center contents vertically and horizontally -->
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ticketRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="60dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="16dp"/>
+
+        </LinearLayout>
         <!-- ImageView for no violations with specified size -->
         <ImageView
             android:id="@+id/noViolationsImage"
@@ -61,16 +57,48 @@
             android:text="No tickets found"
             android:visibility="gone"
             android:layout_gravity="center"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginTop="40dp" />
         <TextView
             android:id="@+id/noViolationsSubMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="There are no violators for today"
+            android:text="You havent submitted any tickets yet."
             android:visibility="gone"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="55dp"/>
 
-    </LinearLayout>
+        <!-- Loading Indicator -->
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noInternetAnimation"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/noint"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+        <!-- TextView for "No Internet" message -->
+        <TextView
+            android:id="@+id/noInternetMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You have no internet."
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_marginTop="40dp"
+            android:visibility="gone"
+            android:fontFamily="@font/poppinsbold"/>
+
+    </FrameLayout>
 
     <include layout="@layout/activity_main_content" />
 

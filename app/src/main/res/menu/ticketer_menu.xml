@@ -21,7 +21,7 @@
         <item
             android:icon="@drawable/baseline_sticky_note_2_24"
             android:id="@+id/mytickets"
-            android:title="My Tickets"/>
+            android:title="My Issued Tickets"/>
     </group>
 
     <group android:id="@+id/log0">

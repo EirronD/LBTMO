@@ -19,181 +19,250 @@
         android:fontFamily="@font/poppinsbold"
         android:textColor="@color/white"/>
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="24dp"
-            android:layout_marginTop="70dp">
+            android:layout_height="match_parent">
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
+                android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_marginTop="50dp"
-                app:cardCornerRadius="30dp"
-                app:cardElevation="4dp">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="24dp"
+                android:layout_marginTop="30dp">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:padding="32dp">
+                    android:layout_margin="16dp"
+                    android:layout_marginTop="50dp"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="4dp">
 
-                    <!-- Profile Picture Section -->
-                    <ImageView
-                        android:id="@+id/user_image"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="16dp"
-                        android:contentDescription="User Profile Picture"
-                        android:src="@drawable/ic_user_placeholder" />
-
-                    <!-- Single Column of TextViews -->
-                    <TextView
-                        android:id="@+id/fnametxt"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="First Name"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="32dp">
 
-                    <TextView
-                        android:id="@+id/lnametxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Last Name"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
+                        <!-- Profile Picture Section -->
+                        <ImageView
+                            android:id="@+id/user_image"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="16dp"
+                            android:contentDescription="User Profile Picture"
+                            android:src="@drawable/ic_user_placeholder" />
 
-                    <TextView
-                        android:id="@+id/mitxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Middle Initial"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
+                        <!-- Single Column of TextViews -->
+                        <TextView
+                            android:id="@+id/fnametxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="First Name"
+                            android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/sextxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Sex"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
+                        <TextView
+                            android:id="@+id/lnametxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="Last Name"
+                            android:textSize="16sp" />
 
+                        <TextView
+                            android:id="@+id/mitxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="Middle Initial"
+                            android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/DateOfBirthday"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Birthday"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
+                        <TextView
+                            android:id="@+id/civilstatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="Civil Status"
+                            android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/emailtxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Email"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
-
-                    <TextView
-                        android:id="@+id/DriverLicenseNo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Driver License No"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
-
-                    <TextView
-                        android:id="@+id/Nationality"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Nationality"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
+                        <TextView
+                            android:id="@+id/sextxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="Sex"
+                            android:textSize="16sp" />
 
 
-                    <TextView
-                        android:id="@+id/PresentAddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="Present Address"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/poppinsregular"
-                        android:maxLines="2"
-                        android:ellipsize="end"/>
+                        <TextView
+                            android:id="@+id/emailtxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="Email"
+                            android:textSize="16sp" />
 
-                    <!-- Buttons Section -->
+                        <TextView
+                            android:id="@+id/DateOfBirthday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="Birthday"
+                            android:textSize="16sp" />
 
-                    <Button
-                        android:id="@+id/buttonEditProfile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:backgroundTint="@color/navy_blue"
-                        android:drawableLeft="@drawable/baseline_person_24white"
-                        android:drawablePadding="8dp"
-                        android:text="Edit Profile"
-                        android:textColor="@color/white"
-                        android:textSize="11sp"
-                        android:fontFamily="@font/poppinsbold"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
+                        <TextView
+                            android:id="@+id/DriverLicenseNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="2"
+                            android:text="Driver License No"
+                            android:textSize="16sp" />
 
-                    <Button
-                        android:id="@+id/buttonEditPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:backgroundTint="@color/navy_blue"
-                        android:drawableLeft="@drawable/baseline_lock_24white"
-                        android:drawablePadding="8dp"
-                        android:text="Edit Password"
-                        android:textColor="@color/white"
-                        android:textSize="11sp"
-                        android:fontFamily="@font/poppinsbold"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
+                        <TextView
+                            android:id="@+id/Nationality"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="1"
+                            android:text="Nationality"
+                            android:textSize="16sp" />
+
+
+                        <TextView
+                            android:id="@+id/PresentAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsregular"
+                            android:maxLines="2"
+                            android:text="Present Address"
+                            android:textSize="16sp" />
+
+                        <!-- Buttons Section -->
+
+                        <Button
+                            android:id="@+id/buttonEditProfile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="@color/navy_blue"
+                            android:drawableLeft="@drawable/baseline_person_24white"
+                            android:drawablePadding="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsbold"
+                            android:maxLines="1"
+                            android:text="Edit Profile"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <!-- tangalin mamaya -->
+                        <Button
+                            android:id="@+id/buttonAddEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="@color/navy_blue"
+                            android:drawableLeft="@drawable/baseline_email_24white"
+                            android:drawablePadding="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsbold"
+                            android:maxLines="1"
+                            android:text="Add Email"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+
+                            />
+
+                        <Button
+                            android:id="@+id/buttonEditPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="@color/navy_blue"
+                            android:drawableLeft="@drawable/baseline_lock_24white"
+                            android:drawablePadding="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppinsbold"
+                            android:maxLines="1"
+                            android:text="Edit Password"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </ScrollView>
+        <!-- Loading Indicator -->
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noInternetAnimation"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/noint"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+        <!-- TextView for "No Internet" message -->
+        <TextView
+            android:id="@+id/noInternetMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You have no internet."
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_marginTop="40dp"
+            android:visibility="gone"
+            android:fontFamily="@font/poppinsbold"/>
+
+    </FrameLayout>
+
+
+
 
     <include layout="@layout/activity_main_content" />
 

@@ -3,6 +3,8 @@
     <style name="Base.Theme.TicketingSystem" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/navy_blue</item> <!-- Navy Blue -->
+
     </style>
 
     <style name="Theme.TicketingSystem" parent="Base.Theme.TicketingSystem" />
