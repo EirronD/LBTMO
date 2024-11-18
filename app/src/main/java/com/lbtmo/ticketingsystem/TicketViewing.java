@@ -270,6 +270,7 @@ public class TicketViewing extends AppCompatActivity {
                     newDriverData.put("AGE", age);
                     newDriverData.put("DOB", dateTv.getText().toString());
                     newDriverData.put("DRIVER_LICENSE", licenseTv.getText().toString().toUpperCase());
+                    newDriverData.put("EMAIL","");
                     newDriverData.put("FNAME", firstnameTv.getText().toString().toUpperCase());
                     newDriverData.put("GENDER", gender.toUpperCase());
                     newDriverData.put("LNAME", lastnameTv.getText().toString().toUpperCase());

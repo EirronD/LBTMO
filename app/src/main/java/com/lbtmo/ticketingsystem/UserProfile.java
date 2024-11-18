@@ -349,7 +349,17 @@ public class UserProfile extends AppCompatActivity {
     }
 
     private void addEmailToDatabase(String email) {
-        // Add the email to the database its your time to shine Dagle
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference("tbl_drivers");
+
+        reference.child(userKey).child("EMAIL").setValue(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(UserProfile.this, "Email updated successfully.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(UserProfile.this, "Failed to update email.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void sendOTP(String email) {
