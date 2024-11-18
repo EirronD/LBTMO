@@ -92,4 +92,5 @@ dependencies {
 
     implementation ("com.airbnb.android:lottie:6.1.0")
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    implementation ("com.rmtheis:tess-two:9.1.0")
 }

@@ -78,6 +78,18 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:fontFamily="@font/poppinsbold"/>
+                    <Button
+                        android:id="@+id/ChooseFromGallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose Gal"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/navy_blue"
+                        android:layout_marginEnd="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:fontFamily="@font/poppinsbold"/>
 
                     <!-- Delete Button -->
                     <Button

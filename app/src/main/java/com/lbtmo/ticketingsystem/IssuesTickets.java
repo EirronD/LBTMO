@@ -5,8 +5,14 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -43,6 +49,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
@@ -50,7 +57,12 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -58,16 +70,20 @@ import java.util.Map;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IssuesTickets extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     private static final int REQUEST_TICKET_EDIT = 2;
+    private static final int SELECT_PICTURE = 102; // Request code for selecting a picture
+    private static final int STORAGE_PERMISSION_REQUEST_CODE = 201;
     private Bitmap imageBitmap;
 
     private ImageView ticketIv;
-    private Button captureCameraBtn, deleteCameraBtn;
-    private EditText dateEt,plateNumberEt, ticketIdEt, descriptionEt, nationality;
+    private Button captureCameraBtn, deleteCameraBtn, choosegallery;
+    private EditText dateEt,plateNumberEt, ticketIdEt, descriptionEt, nationality, lastnameEt, firstnameEt, miEt, licenseEt, addressEt;
 
     private AutoCompleteTextView barangaySpinner, streetSpinner,genderEt;
     private DrawerLayout drawerLayout;
@@ -76,6 +92,7 @@ public class IssuesTickets extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Button submitButton;
     private int age;
+    private TessBaseAPI tessBaseAPI;
 
     private TextView titleTextView; // Declare the TextView
 
@@ -116,6 +133,7 @@ public class IssuesTickets extends AppCompatActivity {
 
         progressBar = findViewById(R.id.loadingIndicator);
         mainLayout = findViewById(R.id.main);
+        choosegallery = findViewById(R.id.ChooseFromGallery);
 
         // Initialize Lottie animation view
         noInternetAnimation = findViewById(R.id.noInternetAnimation);
@@ -124,13 +142,13 @@ public class IssuesTickets extends AppCompatActivity {
         checkInternetAndShowAnimation();
 
         // Find and initialize EditText fields
-        EditText lastnameEt = findViewById(R.id.lastnameEt);
-        EditText firstnameEt = findViewById(R.id.firstnameEt);
-        EditText miEt = findViewById(R.id.miEt);
-        EditText licenseEt = findViewById(R.id.licenseEt);
+        lastnameEt = findViewById(R.id.lastnameEt);
+        firstnameEt = findViewById(R.id.firstnameEt);
+        miEt = findViewById(R.id.miEt);
+        licenseEt = findViewById(R.id.licenseEt);
         AutoCompleteTextView vehicleTypeEt = findViewById(R.id.vehicleTypeEt);
         EditText plateNumberEt = findViewById(R.id.plateNumberEt);
-        EditText addressEt = findViewById(R.id.addressEt);
+        addressEt = findViewById(R.id.addressEt);
         EditText namebadge = findViewById(R.id.namebadgeorg);
         genderEt = findViewById(R.id.genderEt);
         descriptionEt = findViewById(R.id.descriptionEt);
@@ -172,8 +190,16 @@ public class IssuesTickets extends AppCompatActivity {
         setUpGenderAutoComplete();
 
         setUpVehicleTypeAutoComplete();
+        extractTessData();
+        tessBaseAPI = new TessBaseAPI();
+        String dataPath = getFilesDir() + "/tesseract/";
+        tessBaseAPI.init(dataPath, "eng");
+        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+        }
+        choosegallery.setOnClickListener(v -> openGallery());
 
-        // Fetch barangays to populate the barangay spinner
         fetchBarangays();
 
         captureCameraBtn.setOnClickListener(v -> {
@@ -277,6 +303,121 @@ public class IssuesTickets extends AppCompatActivity {
         ticketIdEt.setText(ticketNumber);
 
     }
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*"); // Specify image type
+        startActivityForResult(intent, SELECT_PICTURE);
+    }
+
+    private void extractTessData() {
+        File tessDataDir = new File(getFilesDir(), "tesseract/tessdata");
+        if (!tessDataDir.exists()) {
+            tessDataDir.mkdirs();
+        }
+
+        try {
+            InputStream inputStream = getAssets().open("tessdata/eng.traineddata");
+            FileOutputStream outputStream = new FileOutputStream(new File(tessDataDir, "eng.traineddata"));
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            inputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String extractTextFromImage(Bitmap bitmap) {
+        tessBaseAPI.setImage(bitmap);
+        return tessBaseAPI.getUTF8Text(); // This returns the extracted text
+    }
+
+    private void extractInformation(String extractedText) {
+        // Define patterns to match specific information
+        String namePattern = "([A-Z]+),\\s([A-Z]+(?:\\s[A-Z]+)?)\\s([A-Z]+)";
+        String addressPattern = "(\\d{4}\\s[A-Z]+\\s[A-Z]+\\s[A-Z]+)";
+        String idPattern = "(\\d{3}-\\d{2}-\\d{6})";
+        String nationalitySexBirthdayPattern = "([A-Z]{3})\\s([A-Z])\\s(\\d{4}/\\d{2}/\\d{2})";
+
+        // Use regex to extract matching values
+        extractName(extractedText, namePattern);
+        extractUsingRegex(extractedText, addressPattern, "Address");
+        extractUsingRegex(extractedText, idPattern, "ID");
+        extractNationalitySexBirthday(extractedText, nationalitySexBirthdayPattern);
+    }
+
+    private void extractNationalitySexBirthday(String text, String pattern) {
+        Pattern regexPattern = Pattern.compile(pattern);
+        Matcher matcher = regexPattern.matcher(text);
+        if (matcher.find()) {
+            // Extract parts using Matcher groups
+            String national = matcher.group(1);
+            String sex = matcher.group(2);
+            String birthday = matcher.group(3);
+
+            nationality.setText(national);
+            String[] genders = {"F", "M"};
+            if (Arrays.asList(genders).contains(sex)) {
+                genderEt.setText(sex);
+            } else {
+                Log.e("GenderInput", "Invalid gender value: " + sex);
+            }
+            String reformattedDate = birthday.replace("/", "-");
+            dateEt.setText(reformattedDate);
+            Log.d("Info", "Nationality: " + national);
+            Log.d("Info", "Sex: " + sex);
+            Log.d("Info", "Birthday: " + birthday);
+        } else {
+            Log.d("TAG", "Nationality, Sex, and Birthday not found in extracted text.");
+        }
+    }
+
+    private void extractName(String text, String pattern) {
+        Pattern regexPattern = Pattern.compile(pattern);
+        Matcher matcher = regexPattern.matcher(text);
+        if (matcher.find()) {
+            // Extract name parts using Matcher groups
+            String lname = matcher.group(1);
+            String fname = matcher.group(2);
+            String mname = matcher.group(3);
+
+            lastnameEt.setText(lname);
+            firstnameEt.setText(fname);
+            miEt.setText(mname);
+
+            Log.d("Name", "Last Name: " + lname);
+            Log.d("Name", "First Name: " + fname);
+            Log.d("Name", "Middle Name: " + mname);
+        } else {
+            Log.d("TAG", "Name not found in extracted text.");
+        }
+    }
+
+    private void extractUsingRegex(String text, String pattern, String label) {
+        Pattern regexPattern = Pattern.compile(pattern);
+        Matcher matcher = regexPattern.matcher(text);
+        if (matcher.find()) {
+            String matchedText = matcher.group(0);
+            if (label.equals("ID") && matchedText.matches("\\d{3}-\\d{2}-\\d{6}")) {
+                String idNumber = matchedText.replaceFirst("\\b0", "D");
+                licenseEt.setText(idNumber);
+                Log.d("ID", "Corrected ID: " + idNumber);
+            }
+            else if (label.equals("Address")) {
+                addressEt.setText(matchedText);
+                Log.d("Address", "Extracted Address: " + matchedText);
+            }
+            Log.d("TAG", label + ": " + matchedText);
+        } else {
+            Log.d("TAG", label + " not found in extracted text.");
+        }
+    }
+
     private void checkInternetAndShowAnimation() {
         noInternetAnimation.setVisibility(View.GONE); // Hide the animation initially
         noInternetMessage.setVisibility(View.GONE);   // Hide the message initially
@@ -323,13 +464,10 @@ public class IssuesTickets extends AppCompatActivity {
     private void setUpGenderAutoComplete() {
         AutoCompleteTextView genderEt = findViewById(R.id.genderEt);
 
-        // Create an array of values
         String[] genders = new String[]{"F", "M"};
 
-        // Create an ArrayAdapter to populate the AutoCompleteTextView with your custom layout
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, genders);
 
-        // Set the adapter to the AutoCompleteTextView
         genderEt.setAdapter(adapter);
     }
 
@@ -356,6 +494,12 @@ public class IssuesTickets extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Camera permission is required to use this feature", Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == STORAGE_PERMISSION_REQUEST_CODE && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Proceed with selecting an image from the gallery
+            } else {
+                Toast.makeText(this,"Storage permission is required to select an image from the gallery.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -363,57 +507,132 @@ public class IssuesTickets extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            // Existing code for handling image capture
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
-            ticketIv.setImageBitmap(imageBitmap);
-            runTextRecognition(imageBitmap);
-        } else if (requestCode == REQUEST_TICKET_EDIT && resultCode == RESULT_OK && data != null) {
-            // Handle data returned from TicketViewing
-            String lastname = data.getStringExtra("lastname");
-            String firstname = data.getStringExtra("firstname");
-            String middleInitial = data.getStringExtra("middleInitial");
-            String licenseNumber = data.getStringExtra("licenseNumber");
-            String vehicleType = data.getStringExtra("vehicleType");
-            String plateNumber = data.getStringExtra("plateNumber");
-            String address = data.getStringExtra("address");
-            String barangay = data.getStringExtra("barangay");
-            String street = data.getStringExtra("street");
-            String violation = data.getStringExtra("violation");
-            String confiscatedLicense = data.getStringExtra("confiscatedLicense");
-            String ticketId = data.getStringExtra("ticketId");
-            String gender = data.getStringExtra("gender");
-            String description = data.getStringExtra("description");
-            String namebadgeorg = data.getStringExtra("namebadgeorg");
-            String nationality = data.getStringExtra("nationality");
-
-            // Set data to respective fields in IssuesTickets
-            ((EditText) findViewById(R.id.lastnameEt)).setText(lastname);
-            ((EditText) findViewById(R.id.firstnameEt)).setText(firstname);
-            ((EditText) findViewById(R.id.miEt)).setText(middleInitial);
-            ((EditText) findViewById(R.id.licenseEt)).setText(licenseNumber);
-            ((AutoCompleteTextView) findViewById(R.id.vehicleTypeEt)).setText(vehicleType);
-            ((EditText) findViewById(R.id.plateNumberEt)).setText(plateNumber);
-            ((EditText) findViewById(R.id.addressEt)).setText(address);
-            ((AutoCompleteTextView) findViewById(R.id.barangaySpinner)).setText(barangay, false);
-            ((AutoCompleteTextView) findViewById(R.id.streetSpinner)).setText(street, false);
-            ((EditText) findViewById(R.id.descriptionEt)).setText(description);
-            ((AutoCompleteTextView) findViewById(R.id.genderEt)).setText(gender);
-            ((EditText) findViewById(R.id.namebadgeorg)).setText(namebadgeorg);
-            ((EditText) findViewById(R.id.nationalityEt)).setText(nationality);
-
-            // Set RadioButton state based on confiscatedLicense value
-            RadioGroup radioGroup = findViewById(R.id.radioGroupConfiscated);
-            if ("Yes".equals(confiscatedLicense)) {
-                radioGroup.check(R.id.radioYes);
-            } else if ("No".equals(confiscatedLicense)) {
-                radioGroup.check(R.id.radioNo);
-            }
-
-            // Reload violations in RecyclerView, if necessary
-            fetchViolation();
+        if (resultCode != RESULT_OK || data == null) {
+            Log.e("onActivityResult", "No data returned or result not OK.");
+            return;
         }
+
+        try {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                // Handle image capture
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    if (imageBitmap != null) {
+                        ticketIv.setImageBitmap(imageBitmap);
+                        runTextRecognition(imageBitmap);
+                    } else {
+                        Log.e("onActivityResult", "Captured image is null.");
+                    }
+                } else {
+                    Log.e("onActivityResult", "No extras found in camera intent.");
+                }
+            } else if (requestCode == REQUEST_TICKET_EDIT) {
+                String lastname = data.getStringExtra("lastname");
+                String firstname = data.getStringExtra("firstname");
+                String middleInitial = data.getStringExtra("middleInitial");
+                String licenseNumber = data.getStringExtra("licenseNumber");
+                String vehicleType = data.getStringExtra("vehicleType");
+                String plateNumber = data.getStringExtra("plateNumber");
+                String address = data.getStringExtra("address");
+                String barangay = data.getStringExtra("barangay");
+                String street = data.getStringExtra("street");
+                String violation = data.getStringExtra("violation");
+                String confiscatedLicense = data.getStringExtra("confiscatedLicense");
+                String ticketId = data.getStringExtra("ticketId");
+                String gender = data.getStringExtra("gender");
+                String description = data.getStringExtra("description");
+                String namebadgeorg = data.getStringExtra("namebadgeorg");
+                String nationality = data.getStringExtra("nationality");
+
+                // Set data to respective fields in IssuesTickets
+                ((EditText) findViewById(R.id.lastnameEt)).setText(lastname);
+                ((EditText) findViewById(R.id.firstnameEt)).setText(firstname);
+                ((EditText) findViewById(R.id.miEt)).setText(middleInitial);
+                ((EditText) findViewById(R.id.licenseEt)).setText(licenseNumber);
+                ((AutoCompleteTextView) findViewById(R.id.vehicleTypeEt)).setText(vehicleType);
+                ((EditText) findViewById(R.id.plateNumberEt)).setText(plateNumber);
+                ((EditText) findViewById(R.id.addressEt)).setText(address);
+                ((AutoCompleteTextView) findViewById(R.id.barangaySpinner)).setText(barangay, false);
+                ((AutoCompleteTextView) findViewById(R.id.streetSpinner)).setText(street, false);
+                ((EditText) findViewById(R.id.descriptionEt)).setText(description);
+                ((AutoCompleteTextView) findViewById(R.id.genderEt)).setText(gender);
+                ((EditText) findViewById(R.id.namebadgeorg)).setText(namebadgeorg);
+                ((EditText) findViewById(R.id.nationalityEt)).setText(nationality);
+
+                // Set RadioButton state based on confiscatedLicense value
+                RadioGroup radioGroup = findViewById(R.id.radioGroupConfiscated);
+                if ("Yes".equals(confiscatedLicense)) {
+                    radioGroup.check(R.id.radioYes);
+                } else if ("No".equals(confiscatedLicense)) {
+                    radioGroup.check(R.id.radioNo);
+                }
+
+                fetchViolation();
+            } else if (requestCode == SELECT_PICTURE) {
+                // Handle image selection
+                Uri selectedImageUri = data.getData();
+                if (selectedImageUri != null) {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                    if (bitmap != null) {
+                        Bitmap preprocessedBitmap = preprocessImage(bitmap);
+                        String extractedText = extractTextFromImage(preprocessedBitmap);
+                        extractInformation(extractedText);
+                    } else {
+                        Log.e("onActivityResult", "Bitmap from selected image URI is null.");
+                    }
+                } else {
+                    Log.e("onActivityResult", "Selected image URI is null.");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("onActivityResult","Failed to load the image.");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tessBaseAPI.end(); // Clean up Tesseract to release resources
+    }
+    public Bitmap preprocessImage(Bitmap originalBitmap) {
+        // Convert to grayscale
+        Bitmap grayscaleBitmap = toGrayscale(originalBitmap);
+
+        // Apply adaptive thresholding (Otsu's method)
+        Bitmap thresholdedBitmap = applyThreshold(grayscaleBitmap);
+
+        return thresholdedBitmap;
+    }
+    private Bitmap toGrayscale(Bitmap bitmap) {
+        Bitmap grayscaleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(0);
+
+        Canvas canvas = new Canvas(grayscaleBitmap);
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+
+        return grayscaleBitmap;
+    }
+
+    private Bitmap applyThreshold(Bitmap grayscaleBitmap) {
+        Bitmap thresholdedBitmap = Bitmap.createBitmap(grayscaleBitmap.getWidth(), grayscaleBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        for (int x = 0; x < grayscaleBitmap.getWidth(); x++) {
+            for (int y = 0; y < grayscaleBitmap.getHeight(); y++) {
+                int pixel = grayscaleBitmap.getPixel(x, y);
+                int gray = (pixel >> 16) & 0xFF;
+                // Apply a simple threshold
+                if (gray < 128) {
+                    thresholdedBitmap.setPixel(x, y, Color.BLACK);
+                } else {
+                    thresholdedBitmap.setPixel(x, y, Color.WHITE);
+                }
+            }
+        }
+        return thresholdedBitmap;
     }
 
     private void runTextRecognition(Bitmap bitmap) {

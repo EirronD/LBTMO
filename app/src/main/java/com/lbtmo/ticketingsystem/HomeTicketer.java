@@ -111,6 +111,7 @@ public class HomeTicketer extends AppCompatActivity {
 
         // Query Firebase for violations from today and yesterday
         fetchViolationsByDate(today, true);
+        fetchViolationsByDate(yesterday, false);
 
         // Get top barangay
         getTopBarangays();

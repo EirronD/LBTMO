@@ -145,7 +145,7 @@ public class TicketViewing extends AppCompatActivity {
 
 
         // Set the violation text to the violationTv TextView
-        violationTv.setText(violationText.toString());
+        violationTv.setText(violationTitles.toString());
 
         Button goBackButton = findViewById(R.id.goBackButton);
         goBackButton.setOnClickListener(new View.OnClickListener() {
