@@ -53,6 +53,8 @@ public class ForgotPassword extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private String generatedOtp;
     private Executor executor;
+    private boolean isActivityRunning;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class ForgotPassword extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         executor = Executors.newSingleThreadExecutor(); // For sending email in the background
+
+        isActivityRunning = true;
 
         verifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +106,14 @@ public class ForgotPassword extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isActivityRunning = false;
+        if (countDownTimer != null) {
+            countDownTimer.cancel(); // Cancel the countdown timer to stop it from firing after activity is destroyed
+        }
     }
 
     // Email validation
@@ -135,29 +147,40 @@ public class ForgotPassword extends AppCompatActivity {
         resetemail.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    String userId = userSnapshot.getKey();
-                    if (userId != null) {
-                        database.getReference("tbl_users").child(userId).child("otp").setValue(generatedOtp);
+                if (snapshot.exists()) {
+                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                        String userId = userSnapshot.getKey();
+                        if (userId != null) {
+                            database.getReference("tbl_users").child(userId).child("otp").setValue(generatedOtp);
+
+                            String subject = "Your OTP for Password Reset";
+                            String message = "Your OTP is: " + generatedOtp + ". It will expire in 5 minutes.";
+
+                            executor.execute(() -> sendEmail(email, subject, message));
+
+                            Toast.makeText(ForgotPassword.this, "OTP sent to email", Toast.LENGTH_SHORT).show();
+
+                            // Disable the Verify Button and start timer
+                            verifyButton.setEnabled(false);
+                            startVerifyButtonCountdown();
+
+                            // Show additional inputs
+                            confirmPassInputLayout.setVisibility(View.VISIBLE);
+                            newPassInputLayout.setVisibility(View.VISIBLE);
+                            otpInputLayout.setVisibility(View.VISIBLE);
+
+                            otpInput.setVisibility(View.VISIBLE);
+                            newPasswordInput.setVisibility(View.VISIBLE);
+                            confirmPasswordInput.setVisibility(View.VISIBLE);
+                            submitButton.setVisibility(View.VISIBLE);
+                            timerText.setVisibility(View.VISIBLE);
+
+                            startOtpCountdown();
+                        }
                     }
+                } else {
+                    Toast.makeText(ForgotPassword.this, "No user found with this email.", Toast.LENGTH_SHORT).show();
                 }
-                String subject = "Your OTP for Password Reset";
-                String message = "Your OTP is: " + generatedOtp + ". It will expire in 5 minutes.";
-
-                executor.execute(() -> sendEmail(email, subject, message));
-
-                Toast.makeText(ForgotPassword.this, "OTP sent to email", Toast.LENGTH_SHORT).show();
-                confirmPassInputLayout.setVisibility(View.VISIBLE);
-                newPassInputLayout.setVisibility(View.VISIBLE);
-                otpInputLayout.setVisibility(View.VISIBLE);
-
-                otpInput.setVisibility(View.VISIBLE);
-                newPasswordInput.setVisibility(View.VISIBLE);
-                confirmPasswordInput.setVisibility(View.VISIBLE);
-                submitButton.setVisibility(View.VISIBLE);
-                timerText.setVisibility(View.VISIBLE);
-
-                startOtpCountdown();
             }
 
             @Override
@@ -165,6 +188,23 @@ public class ForgotPassword extends AppCompatActivity {
                 Log.e("FirebaseError", error.getMessage());
             }
         });
+    }
+
+    private void startVerifyButtonCountdown() {
+        new CountDownTimer(OTP_TIMEOUT, 1000) { // 5 minutes
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long minutes = millisUntilFinished / 60000;
+                long seconds = (millisUntilFinished % 60000) / 1000;
+                verifyButton.setText(String.format("Wait %02d:%02d", minutes, seconds));
+            }
+
+            @Override
+            public void onFinish() {
+                verifyButton.setText("Send OTP to Email");
+                verifyButton.setEnabled(true);
+            }
+        }.start();
     }
 
     private void sendEmail(String recipient, String subject, String message) {
@@ -232,19 +272,16 @@ public class ForgotPassword extends AppCompatActivity {
 
         String email = emailInput.getText().toString().trim(); // Get the user's email
 
-        // Check in tbl_users first
         Query userQuery = database.getReference("tbl_users").orderByChild("EMAIL").equalTo(email);
 
         userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // Email found in tbl_users
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                         handleOtpVerification(userSnapshot, otp, newPassword, confirmPassword);
                     }
                 } else {
-                    // If not found in tbl_users, check in tbl_drivers
                     checkInDriversTable(email, otp, newPassword, confirmPassword);
                 }
             }
@@ -257,13 +294,12 @@ public class ForgotPassword extends AppCompatActivity {
         });
     }
     private void checkInDriversTable(String email, String otp, String newPassword, String confirmPassword) {
-        Query driverQuery = database.getReference("tbl_drivers").orderByChild("EMAIL").equalTo(email);
+        Query driverQuery = database.getReference("tbl_users").orderByChild("EMAIL").equalTo(email);
 
         driverQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // Email found in tbl_drivers
                     for (DataSnapshot driverSnapshot : snapshot.getChildren()) {
                         handleOtpVerification(driverSnapshot, otp, newPassword, confirmPassword);
                     }
@@ -314,6 +350,12 @@ public class ForgotPassword extends AppCompatActivity {
             database.getReference(tableName).child(userId).child("PASSWORD").setValue(newPassword)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            // Cancel the OTP timer if the password update is successful
+                            if (countDownTimer != null) {
+                                countDownTimer.cancel();
+                            }
+
+                            // Show success message
                             Toast.makeText(ForgotPassword.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
                             finish(); // Close the activity
                         } else {

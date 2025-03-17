@@ -33,7 +33,7 @@
                 android:layout_height="135dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/logo" />
+                android:src="@drawable/newlogolbtmo" />
         </androidx.cardview.widget.CardView>
 
 

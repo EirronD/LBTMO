@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TicketingSystem</string>
+    <string name="app_name">LBTMO Ticketing System</string>
     <string name="title_activity_issue_ticket">IssueTicket</string>
     <string name="title_activity_issue_tickets">IssueTickets</string>
 </resources>

@@ -303,10 +303,12 @@ public class IssuesTickets extends AppCompatActivity {
         ticketIdEt.setText(ticketNumber);
 
     }
+
     private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*"); // Specify image type
-        startActivityForResult(intent, SELECT_PICTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, SELECT_PICTURE);
+        }
     }
 
     private void extractTessData() {
@@ -570,19 +572,24 @@ public class IssuesTickets extends AppCompatActivity {
 
                 fetchViolation();
             } else if (requestCode == SELECT_PICTURE) {
-                // Handle image selection
-                Uri selectedImageUri = data.getData();
-                if (selectedImageUri != null) {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    if (bitmap != null) {
-                        Bitmap preprocessedBitmap = preprocessImage(bitmap);
-                        String extractedText = extractTextFromImage(preprocessedBitmap);
-                        extractInformation(extractedText);
-                    } else {
-                        Log.e("onActivityResult", "Bitmap from selected image URI is null.");
-                    }
+                Bitmap bitmap = null;
+
+                // If data is from the gallery, the image will be in data.getData()
+                if (data.getData() != null) {
+                    Uri imageUri = data.getData();
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                } else if (data.getExtras() != null) {
+                    // Handle camera result (when image is in extras)
+                    bitmap = (Bitmap) data.getExtras().get("data");
+                }
+
+                // If bitmap is successfully retrieved
+                if (bitmap != null) {
+                    Bitmap preprocessedBitmap = preprocessImage(bitmap); // Assuming this method preprocesses the Bitmap
+                    String extractedText = extractTextFromImage(preprocessedBitmap); // Assuming this extracts text
+                    extractInformation(extractedText);  // Assuming this processes the extracted information
                 } else {
-                    Log.e("onActivityResult", "Selected image URI is null.");
+                    Log.e("onActivityResult", "Bitmap is null. Image capture or selection might have failed.");
                 }
             }
         } catch (IOException e) {

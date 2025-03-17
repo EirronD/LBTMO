@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Email"
+            android:text="Edit Email"
             android:textSize="18sp"
             android:layout_marginBottom="16dp"/>
 
@@ -33,7 +33,7 @@
         android:id="@+id/editTextAddGmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Add Email"
+        android:hint="Edit Email"
         android:fontFamily="@font/poppinsregular"
         android:maxLines="1" />
 

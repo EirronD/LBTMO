@@ -22,9 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:src="@drawable/logo"
+        android:src="@drawable/newlogolbtmo"
         android:adjustViewBounds="true"
-        android:maxWidth="250dp" />
+        android:maxWidth="250dp"
+        android:elevation="40dp"/>
 </androidx.cardview.widget.CardView>
 
 
