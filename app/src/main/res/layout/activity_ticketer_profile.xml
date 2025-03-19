@@ -121,6 +121,16 @@
                                 android:maxLines="1"
                                 android:ellipsize="end"
                                 android:fontFamily="@font/poppinsregular"/>
+                            <TextView
+                                android:id="@+id/ApprehendingOfficers"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Apprehending Officer ID"
+                                android:textSize="16sp"
+                                android:layout_marginBottom="16dp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/poppinsregular"/>
                         </LinearLayout>
 
                         <!-- Single Column for Buttons -->

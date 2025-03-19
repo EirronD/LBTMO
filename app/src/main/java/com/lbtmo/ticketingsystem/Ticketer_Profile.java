@@ -36,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Ticketer_Profile extends AppCompatActivity {
     private TextView fnametxt, lnametxt, mitxt, emailtxt, username;
     private ImageView userImage;
-    private TextView titleTextView; // Declare the TextView
+    private TextView titleTextView, ApprehendingOfficers; // Declare the TextView
 
     private ProgressBar progressBar;
     private LinearLayout mainLayout;
@@ -61,6 +61,7 @@ public class Ticketer_Profile extends AppCompatActivity {
         emailtxt = findViewById(R.id.Email);
         userImage = findViewById(R.id.user_image);
         username = findViewById(R.id.username);
+        ApprehendingOfficers = findViewById(R.id.ApprehendingOfficers);
 
         drawerLayout = findViewById(R.id.drawerLayout);
         buttonDrawerToggle = findViewById(R.id.buttonDrawerToggle);
@@ -75,6 +76,8 @@ public class Ticketer_Profile extends AppCompatActivity {
         // Initialize Lottie animation view
         noInternetAnimation = findViewById(R.id.noInternetAnimation);
         noInternetMessage = findViewById(R.id.noInternetMessage);
+
+
 
         // Call function to check internet and show animation if necessary
         checkInternetAndShowAnimation();
@@ -296,6 +299,7 @@ public class Ticketer_Profile extends AppCompatActivity {
                     String email = snapshot.child("EMAIL").getValue(String.class);
                     String imageUrl = snapshot.child("PROFILE").getValue(String.class);
                     String uname = snapshot.child("USERNAME").getValue(String.class);
+                    String apprehend = snapshot.child("APPREHEND").getValue(String.class);
 
                     // Set the text views
                     fnametxt.setText("First Name: " + firstName);
@@ -303,6 +307,8 @@ public class Ticketer_Profile extends AppCompatActivity {
                     mitxt.setText("Middle Initial: " + middleInitial);
                     emailtxt.setText("Email: " + email);
                     username.setText(uname);
+                    ApprehendingOfficers.setText("Apprehending ID: "+ apprehend);
+
 
                     // Decode and display the base64 image if available
                     if (!TextUtils.isEmpty(imageUrl)) {
