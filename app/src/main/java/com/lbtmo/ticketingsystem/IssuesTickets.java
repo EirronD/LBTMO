@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,10 +59,21 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -70,6 +83,7 @@ import java.util.Map;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,9 +91,10 @@ public class IssuesTickets extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     private static final int REQUEST_TICKET_EDIT = 2;
-    private static final int SELECT_PICTURE = 102; // Request code for selecting a picture
-    private static final int STORAGE_PERMISSION_REQUEST_CODE = 201;
+    private static final int STORAGE_REQUEST = 102;
+    private static final int STORAGE_PERMISSION = 201;
     private Bitmap imageBitmap;
+    private Uri imageUri;
 
     private ImageView ticketIv;
     private Button captureCameraBtn, deleteCameraBtn, choosegallery;
@@ -195,10 +210,16 @@ public class IssuesTickets extends AppCompatActivity {
         String dataPath = getFilesDir() + "/tesseract/";
         tessBaseAPI.init(dataPath, "eng");
         tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
-        }
-        choosegallery.setOnClickListener(v -> openGallery());
+
+        choosegallery.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA}, STORAGE_PERMISSION);
+            } else {
+                BuksanCamera();
+            }
+        });
 
         fetchBarangays();
 
@@ -304,13 +325,6 @@ public class IssuesTickets extends AppCompatActivity {
 
     }
 
-    private void openGallery() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, SELECT_PICTURE);
-        }
-    }
-
     private void extractTessData() {
         File tessDataDir = new File(getFilesDir(), "tesseract/tessdata");
         if (!tessDataDir.exists()) {
@@ -331,92 +345,6 @@ public class IssuesTickets extends AppCompatActivity {
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private String extractTextFromImage(Bitmap bitmap) {
-        tessBaseAPI.setImage(bitmap);
-        return tessBaseAPI.getUTF8Text(); // This returns the extracted text
-    }
-
-    private void extractInformation(String extractedText) {
-        // Define patterns to match specific information
-        String namePattern = "([A-Z]+),\\s([A-Z]+(?:\\s[A-Z]+)?)\\s([A-Z]+)";
-        String addressPattern = "(\\d{4}\\s[A-Z]+\\s[A-Z]+\\s[A-Z]+)";
-        String idPattern = "(\\d{3}-\\d{2}-\\d{6})";
-        String nationalitySexBirthdayPattern = "([A-Z]{3})\\s([A-Z])\\s(\\d{4}/\\d{2}/\\d{2})";
-
-        // Use regex to extract matching values
-        extractName(extractedText, namePattern);
-        extractUsingRegex(extractedText, addressPattern, "Address");
-        extractUsingRegex(extractedText, idPattern, "ID");
-        extractNationalitySexBirthday(extractedText, nationalitySexBirthdayPattern);
-    }
-
-    private void extractNationalitySexBirthday(String text, String pattern) {
-        Pattern regexPattern = Pattern.compile(pattern);
-        Matcher matcher = regexPattern.matcher(text);
-        if (matcher.find()) {
-            // Extract parts using Matcher groups
-            String national = matcher.group(1);
-            String sex = matcher.group(2);
-            String birthday = matcher.group(3);
-
-            nationality.setText(national);
-            String[] genders = {"F", "M"};
-            if (Arrays.asList(genders).contains(sex)) {
-                genderEt.setText(sex);
-            } else {
-                Log.e("GenderInput", "Invalid gender value: " + sex);
-            }
-            String reformattedDate = birthday.replace("/", "-");
-            dateEt.setText(reformattedDate);
-            Log.d("Info", "Nationality: " + national);
-            Log.d("Info", "Sex: " + sex);
-            Log.d("Info", "Birthday: " + birthday);
-        } else {
-            Log.d("TAG", "Nationality, Sex, and Birthday not found in extracted text.");
-        }
-    }
-
-    private void extractName(String text, String pattern) {
-        Pattern regexPattern = Pattern.compile(pattern);
-        Matcher matcher = regexPattern.matcher(text);
-        if (matcher.find()) {
-            // Extract name parts using Matcher groups
-            String lname = matcher.group(1);
-            String fname = matcher.group(2);
-            String mname = matcher.group(3);
-
-            lastnameEt.setText(lname);
-            firstnameEt.setText(fname);
-            miEt.setText(mname);
-
-            Log.d("Name", "Last Name: " + lname);
-            Log.d("Name", "First Name: " + fname);
-            Log.d("Name", "Middle Name: " + mname);
-        } else {
-            Log.d("TAG", "Name not found in extracted text.");
-        }
-    }
-
-    private void extractUsingRegex(String text, String pattern, String label) {
-        Pattern regexPattern = Pattern.compile(pattern);
-        Matcher matcher = regexPattern.matcher(text);
-        if (matcher.find()) {
-            String matchedText = matcher.group(0);
-            if (label.equals("ID") && matchedText.matches("\\d{3}-\\d{2}-\\d{6}")) {
-                String idNumber = matchedText.replaceFirst("\\b0", "D");
-                licenseEt.setText(idNumber);
-                Log.d("ID", "Corrected ID: " + idNumber);
-            }
-            else if (label.equals("Address")) {
-                addressEt.setText(matchedText);
-                Log.d("Address", "Extracted Address: " + matchedText);
-            }
-            Log.d("TAG", label + ": " + matchedText);
-        } else {
-            Log.d("TAG", label + " not found in extracted text.");
         }
     }
 
@@ -496,26 +424,30 @@ public class IssuesTickets extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Camera permission is required to use this feature", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == STORAGE_PERMISSION_REQUEST_CODE && grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Proceed with selecting an image from the gallery
+        } else if (requestCode == STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                BuksanCamera();
             } else {
-                Toast.makeText(this,"Storage permission is required to select an image from the gallery.", Toast.LENGTH_SHORT).show();
+                Log.e("Error", "Camera permission denied.");
             }
         }
+    }
+
+    private void BuksanCamera() {
+        File photoFile = new File(getExternalFilesDir(null), "captured_image.jpg");
+        imageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
+
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(cameraIntent, STORAGE_REQUEST);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode != RESULT_OK || data == null) {
-            Log.e("onActivityResult", "No data returned or result not OK.");
-            return;
-        }
-
         try {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 // Handle image capture
                 Bundle extras = data.getExtras();
                 if (extras != null) {
@@ -529,7 +461,7 @@ public class IssuesTickets extends AppCompatActivity {
                 } else {
                     Log.e("onActivityResult", "No extras found in camera intent.");
                 }
-            } else if (requestCode == REQUEST_TICKET_EDIT) {
+            } else if (requestCode == REQUEST_TICKET_EDIT && resultCode == RESULT_OK) {
                 String lastname = data.getStringExtra("lastname");
                 String firstname = data.getStringExtra("firstname");
                 String middleInitial = data.getStringExtra("middleInitial");
@@ -571,75 +503,113 @@ public class IssuesTickets extends AppCompatActivity {
                 }
 
                 fetchViolation();
-            } else if (requestCode == SELECT_PICTURE) {
-                Bitmap bitmap = null;
-
-                // If data is from the gallery, the image will be in data.getData()
-                if (data.getData() != null) {
-                    Uri imageUri = data.getData();
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                } else if (data.getExtras() != null) {
-                    // Handle camera result (when image is in extras)
-                    bitmap = (Bitmap) data.getExtras().get("data");
-                }
-
-                // If bitmap is successfully retrieved
-                if (bitmap != null) {
-                    Bitmap preprocessedBitmap = preprocessImage(bitmap); // Assuming this method preprocesses the Bitmap
-                    String extractedText = extractTextFromImage(preprocessedBitmap); // Assuming this extracts text
-                    extractInformation(extractedText);  // Assuming this processes the extracted information
-                } else {
-                    Log.e("onActivityResult", "Bitmap is null. Image capture or selection might have failed.");
-                }
+            } else if (requestCode == STORAGE_REQUEST && resultCode == RESULT_OK) {
+                sendImageToServer();
             }
-        } catch (IOException e) {
+        }catch (Exception e) { // Catch general exceptions if needed
             e.printStackTrace();
-            Log.e("onActivityResult","Failed to load the image.");
+            Log.e("onActivityResult", "An error occurred.");
         }
+    }
+
+    private void sendImageToServer() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                File imageFile = new File(getExternalFilesDir(null), "captured_image.jpg");
+                FileInputStream fis = new FileInputStream(imageFile);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    baos.write(buffer, 0, bytesRead);
+                }
+                fis.close();
+                byte[] imageBytes = baos.toByteArray();
+
+                String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                JSONObject json = new JSONObject();
+                json.put("image", base64Image);
+
+                URL url = new URL("https://web-production-18e56.up.railway.app/extract_text");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+
+                OutputStream os = conn.getOutputStream();
+                OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);
+                writer.write(json.toString());
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+
+                    JSONObject responseJson = new JSONObject(response.toString());
+                    runOnUiThread(() -> {
+                        try {
+                            String name = responseJson.getString("name");
+                            String address = responseJson.getString("address");
+                            String id_number = responseJson.getString("id_number");
+                            String national = responseJson.getString("nationality");
+                            String sex = responseJson.getString("sex");
+                            String birthday = responseJson.getString("birthday");
+                            Parsename(name);
+                            addressEt.setText(address);
+                            genderEt.setText(sex);
+                            nationality.setText(national);
+                            licenseEt.setText(id_number);
+                            dateEt.setText(birthday);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    runOnUiThread(() -> Log.e("Error", "Error: " + responseCode));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Log.e("Error", "Error"));
+            }
+        });
+    }
+
+    private void Parsename(String name) {
+        String[] parts = name.split(", ");
+
+        if (parts.length < 2) {
+            System.out.println("Invalid format");
+            return;
+        }
+
+        String lastN = parts[0]; // Last name is before the comma
+        String[] firstMiddle = parts[1].split(" ");
+
+        if (firstMiddle.length < 2) {
+            System.out.println("Invalid format");
+            return;
+        }
+        String firstN = String.join(" ", Arrays.copyOf(firstMiddle, firstMiddle.length - 1));
+
+        String middleN = firstMiddle[firstMiddle.length - 1];
+
+        lastnameEt.setText(lastN);
+        firstnameEt.setText(firstN);
+        miEt.setText(middleN);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        tessBaseAPI.end(); // Clean up Tesseract to release resources
-    }
-    public Bitmap preprocessImage(Bitmap originalBitmap) {
-        // Convert to grayscale
-        Bitmap grayscaleBitmap = toGrayscale(originalBitmap);
-
-        // Apply adaptive thresholding (Otsu's method)
-        Bitmap thresholdedBitmap = applyThreshold(grayscaleBitmap);
-
-        return thresholdedBitmap;
-    }
-    private Bitmap toGrayscale(Bitmap bitmap) {
-        Bitmap grayscaleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        ColorMatrix colorMatrix = new ColorMatrix();
-        colorMatrix.setSaturation(0);
-
-        Canvas canvas = new Canvas(grayscaleBitmap);
-        Paint paint = new Paint();
-        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-
-        return grayscaleBitmap;
-    }
-
-    private Bitmap applyThreshold(Bitmap grayscaleBitmap) {
-        Bitmap thresholdedBitmap = Bitmap.createBitmap(grayscaleBitmap.getWidth(), grayscaleBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        for (int x = 0; x < grayscaleBitmap.getWidth(); x++) {
-            for (int y = 0; y < grayscaleBitmap.getHeight(); y++) {
-                int pixel = grayscaleBitmap.getPixel(x, y);
-                int gray = (pixel >> 16) & 0xFF;
-                // Apply a simple threshold
-                if (gray < 128) {
-                    thresholdedBitmap.setPixel(x, y, Color.BLACK);
-                } else {
-                    thresholdedBitmap.setPixel(x, y, Color.WHITE);
-                }
-            }
-        }
-        return thresholdedBitmap;
+        tessBaseAPI.end();
     }
 
     private void runTextRecognition(Bitmap bitmap) {
@@ -974,7 +944,6 @@ public class IssuesTickets extends AppCompatActivity {
         }
     }
 
-
     private String validateInputs(String lastname, String firstname, String middleInitial, String licenseNumber,
                                   String vehicleType, String plateNumber, String gender, String namebadgeorg, String nationality) {
         // Check for null or empty fields
@@ -1064,13 +1033,4 @@ public class IssuesTickets extends AppCompatActivity {
         return nationality != null && nationality.matches("^[a-zA-Z]{3,4}$"); // Allows only 3 to 4 letters
     }
 
-    // Helper method to convert Bitmap to byte array
-    private byte[] convertBitmapToByteArray(Bitmap bitmap) {
-        if (bitmap == null) {
-            return new byte[0]; // Return an empty byte array if bitmap is null
-        }
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream); // Adjust format and quality as needed
-        return stream.toByteArray();
-    }
 }
