@@ -135,9 +135,8 @@
                         <GridLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:columnCount="3"
+                            android:columnCount="4"
                             android:alignmentMode="alignMargins"
-                            android:padding="8dp"
                             android:layout_gravity="center">
 
                             <!-- Last Name Field -->
@@ -149,7 +148,8 @@
                                 app:boxStrokeColor="@color/navy_blue"
                                 app:counterTextColor="@color/navy_blue"
                                 app:helperTextTextColor="@color/navy_blue"
-                                app:hintTextColor="@color/navy_blue">
+                                app:hintTextColor="@color/navy_blue"
+                                android:layout_columnSpan="4">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/lastnameEt"
@@ -167,12 +167,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_columnWeight="1"
-                                android:layout_marginStart="8dp"
                                 app:boxBackgroundMode="outline"
                                 app:boxStrokeColor="@color/navy_blue"
                                 app:counterTextColor="@color/navy_blue"
                                 app:helperTextTextColor="@color/navy_blue"
-                                app:hintTextColor="@color/navy_blue">
+                                app:hintTextColor="@color/navy_blue"
+                                android:layout_columnSpan="4">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/firstnameEt"
@@ -190,12 +190,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_columnWeight="1"
-                                android:layout_marginStart="8dp"
                                 app:boxBackgroundMode="outline"
                                 app:boxStrokeColor="@color/navy_blue"
                                 app:counterTextColor="@color/navy_blue"
                                 app:helperTextTextColor="@color/navy_blue"
-                                app:hintTextColor="@color/navy_blue">
+                                app:hintTextColor="@color/navy_blue"
+                                android:layout_columnSpan="4">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/miEt"
@@ -259,7 +259,7 @@
                                     android:padding="12dp"
                                     android:singleLine="true"
                                     android:textSize="12sp"
-                                    android:inputType="none"/>
+                                    android:inputType="none" />
 
                             </com.google.android.material.textfield.TextInputLayout>
                             <com.google.android.material.textfield.TextInputLayout
@@ -292,8 +292,7 @@
                         <GridLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:columnCount="2"
-                            android:alignmentMode="alignMargins">
+                            android:columnCount="2">
 
                             <!-- License Number Field -->
                             <com.google.android.material.textfield.TextInputLayout
@@ -310,12 +309,11 @@
                                     android:id="@+id/licenseEt"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="License Number"
+                                    android:hint="License No."
                                     android:padding="12dp"
                                     android:textSize="12sp"
                                     android:singleLine="true"
-                                    android:fontFamily="@font/poppinsbold"
-                                    android:layout_marginStart="7dp"/>
+                                    android:fontFamily="@font/poppinsbold" />
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Select Date Field -->
@@ -339,7 +337,6 @@
                                     android:textSize="12sp"
                                     android:singleLine="true"
                                     android:fontFamily="@font/poppinsbold"
-                                    android:layout_marginEnd="7dp"
                                     android:focusable="false"
                                     android:clickable="false"
                                     android:cursorVisible="false"/>
@@ -418,8 +415,7 @@
                         <GridLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:columnCount="2"
-                            android:alignmentMode="alignMargins">
+                            android:columnCount="2">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
@@ -437,7 +433,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_columnWeight="1"
-                                    android:hint="Vehicle Type"
+                                    android:hint="Vehicle"
                                     android:padding="12dp"
                                     android:layout_marginBottom="8dp"
                                     android:textSize="12sp"
@@ -462,7 +458,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_columnWeight="1"
-                                    android:hint="Plate Number"
+                                    android:hint="Plate No."
                                     android:padding="12dp"
                                     android:layout_marginBottom="8dp"
                                     android:textSize="12sp"
@@ -519,8 +515,8 @@
                                 app:counterTextColor="@color/navy_blue"
                                 app:helperTextTextColor="@color/navy_blue"
                                 app:hintTextColor="@color/navy_blue"
-                                android:layout_marginEnd="8dp"
-                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                android:layout_columnSpan="2">
 
                                 <AutoCompleteTextView
                                     android:id="@+id/barangaySpinner"
@@ -556,6 +552,42 @@
                                     android:gravity="start|center_vertical"/>
                             </com.google.android.material.textfield.TextInputLayout>
                         </GridLayout>
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="1"
+                            android:alignmentMode="alignMargins">
+                            <!-- Barangay Input Layout -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                app:boxBackgroundMode="outline"
+                                app:boxStrokeColor="@color/navy_blue"
+                                app:counterTextColor="@color/navy_blue"
+                                app:helperTextTextColor="@color/navy_blue"
+                                app:hintTextColor="@color/navy_blue"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/SelectViolation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Select Violation"
+                                    android:padding="12dp"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/poppinsbold"
+                                    android:inputType="none"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <LinearLayout
+                                android:id="@+id/violationContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginTop="16dp"
+                                android:layout_columnWeight="1"/>
+                        </GridLayout>
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -572,31 +604,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_columnWeight="1"
+                                android:layout_marginBottom="8dp"
+                                android:fontFamily="@font/poppinsbold"
                                 android:hint="Notes"
                                 android:padding="12dp"
-                                android:layout_marginBottom="8dp"
-                                android:textSize="12sp"
                                 android:singleLine="true"
-                                android:fontFamily="@font/poppinsbold"/>
+                                android:textSize="12sp" />
 
                         </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:text="ViolationList"
-                            android:textAlignment="center"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/poppinsbold"
-                            android:layout_marginTop="8dp"/>
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/ViolationRecyclerView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left">
-
-                        </androidx.recyclerview.widget.RecyclerView>
                         <!-- License Number Field -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -612,12 +627,11 @@
                                 android:id="@+id/namebadgeorg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Apprehending Officer Name Badge No. Organization"
+                                android:hint="Apprehending Officer Badge No."
                                 android:padding="12dp"
                                 android:textSize="12sp"
                                 android:singleLine="true"
-                                android:fontFamily="@font/poppinsbold"
-                                android:layout_marginStart="7dp"/>
+                                android:fontFamily="@font/poppinsbold" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

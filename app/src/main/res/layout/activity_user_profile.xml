@@ -69,7 +69,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="First Name"
                             android:textSize="16sp" />
 
@@ -80,7 +80,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="Last Name"
                             android:textSize="16sp" />
 
@@ -91,7 +91,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="Middle Initial"
                             android:textSize="16sp" />
 
@@ -102,7 +102,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="Civil Status"
                             android:textSize="16sp" />
 
@@ -113,7 +113,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="Sex"
                             android:textSize="16sp" />
 
@@ -125,7 +125,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="Email"
                             android:textSize="16sp" />
 
@@ -136,7 +136,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="Birthday"
                             android:textSize="16sp" />
 
@@ -159,7 +159,7 @@
                             android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/poppinsregular"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:text="Nationality"
                             android:textSize="16sp" />
 

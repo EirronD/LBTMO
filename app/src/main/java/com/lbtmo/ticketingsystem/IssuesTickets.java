@@ -16,8 +16,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,11 +41,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -78,11 +82,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -98,7 +104,7 @@ public class IssuesTickets extends AppCompatActivity {
 
     private ImageView ticketIv;
     private Button captureCameraBtn, deleteCameraBtn, choosegallery;
-    private EditText dateEt,plateNumberEt, ticketIdEt, descriptionEt, nationality, lastnameEt, firstnameEt, miEt, licenseEt, addressEt;
+    private EditText dateEt,plateNumberEt, ticketIdEt, descriptionEt, nationality, lastnameEt, firstnameEt, miEt, licenseEt, addressEt, namebadgeorg;
 
     private AutoCompleteTextView barangaySpinner, streetSpinner,genderEt;
     private DrawerLayout drawerLayout;
@@ -149,6 +155,7 @@ public class IssuesTickets extends AppCompatActivity {
         progressBar = findViewById(R.id.loadingIndicator);
         mainLayout = findViewById(R.id.main);
         choosegallery = findViewById(R.id.ChooseFromGallery);
+        namebadgeorg = findViewById(R.id.namebadgeorg);
 
         // Initialize Lottie animation view
         noInternetAnimation = findViewById(R.id.noInternetAnimation);
@@ -200,7 +207,9 @@ public class IssuesTickets extends AppCompatActivity {
         }
 
         // Load violations into RecyclerView (use fetchViolation as defined in your code)
-        fetchViolation();
+        //fetchViolation();
+        fetchUserData(userKey);
+        setupDummyViolationSpinner();
 
         setUpGenderAutoComplete();
 
@@ -432,6 +441,113 @@ public class IssuesTickets extends AppCompatActivity {
             }
         }
     }
+    private void fetchUserData(String userKey) {
+        DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("tbl_users").child(userKey);
+
+        userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String apprehend = snapshot.child("APPREHEND").getValue(String.class);
+                    namebadgeorg.setText(apprehend);
+                } else {
+                    Toast.makeText(IssuesTickets.this, "User not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressBar.setVisibility(View.GONE);
+                Log.e("Ticketer_Profile", "Error fetching user data: " + error.getMessage());
+                Toast.makeText(IssuesTickets.this, "Error loading user data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void setupDummyViolationSpinner() {
+        AutoCompleteTextView selectViolation = findViewById(R.id.SelectViolation);
+        LinearLayout violationContainer = findViewById(R.id.violationContainer);
+
+        // Initialize Firebase reference
+        DatabaseReference offenseRef = FirebaseDatabase.getInstance().getReference("tbl_offense");
+
+        // List to store fetched violations
+        List<TicketViolation> violationList = new ArrayList<>();
+
+        // Fetch violations from Firebase
+        offenseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                violationList.clear();
+                for (DataSnapshot offenseSnapshot : snapshot.getChildren()) {
+                    String code = offenseSnapshot.child("CODE").getValue(String.class);
+                    String title = offenseSnapshot.child("OFFENSE").getValue(String.class);
+
+                    if (code != null && title != null) {
+                        violationList.add(new TicketViolation(code, title));
+                    }
+                }
+
+                // Set up the custom adapter
+                TicketViolationAdapter adapter = new TicketViolationAdapter(IssuesTickets.this, violationList);
+                selectViolation.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("setupViolationSpinner", "Error fetching violations", error.toException());
+            }
+        });
+
+        // Handle item selection from the dropdown
+        selectViolation.setOnItemClickListener((parent, view, position, id) -> {
+            TicketViolation selectedViolation = violationList.get(position);
+
+            // Create a new layout for the violation item (TextView + Delete Button)
+            LinearLayout itemLayout = new LinearLayout(this);
+            itemLayout.setOrientation(LinearLayout.HORIZONTAL);
+            itemLayout.setPadding(8, 8, 8, 8);
+            itemLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+
+            // Create TextView for the violation
+            TextView textView = new TextView(this);
+            textView.setText(selectedViolation.getCode() + " " + selectedViolation.getTitle());
+            textView.setTextSize(14);
+            textView.setPadding(8, 8, 8, 8);
+            textView.setTypeface(ResourcesCompat.getFont(this, R.font.poppinsbold));
+            textView.setLayoutParams(new LinearLayout.LayoutParams(
+                    0,  // Make text take up available space
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1    // Give weight to push delete button to the right
+            ));
+
+            // Create Delete Button (ImageView)
+            ImageView deleteButton = new ImageView(this);
+            deleteButton.setImageResource(R.drawable.baseline_delete_24);
+            deleteButton.setContentDescription("Delete Violation");
+            deleteButton.setPadding(16, 8, 8, 8);
+
+            // Align delete button to the right
+            LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            deleteParams.gravity = Gravity.END;
+            deleteButton.setLayoutParams(deleteParams);
+
+            // Handle delete action
+            deleteButton.setOnClickListener(v -> violationContainer.removeView(itemLayout));
+
+            // Add views to item layout
+            itemLayout.addView(textView);
+            itemLayout.addView(deleteButton);
+
+            // Add the item layout to the violation container
+            violationContainer.addView(itemLayout);
+        });
+    }
 
     private void BuksanCamera() {
         File photoFile = new File(getExternalFilesDir(null), "captured_image.jpg");
@@ -502,7 +618,7 @@ public class IssuesTickets extends AppCompatActivity {
                     radioGroup.check(R.id.radioNo);
                 }
 
-                fetchViolation();
+                //fetchViolation();
             } else if (requestCode == STORAGE_REQUEST && resultCode == RESULT_OK) {
                 sendImageToServer();
             }
@@ -652,7 +768,7 @@ public class IssuesTickets extends AppCompatActivity {
                 text.matches("^[A-Z]\\s?\\d{3}\\s?[A-Z]{2}$");
     }
 
-    private void fetchViolation() {
+    /*private void fetchViolation() {
         recyclerView = findViewById(R.id.ViolationRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         violationList = new ArrayList<>();
@@ -693,7 +809,7 @@ public class IssuesTickets extends AppCompatActivity {
                 Log.e("fetchViolation", "Error fetching data", error.toException());
             }
         });
-    }
+    }*/
 
     private void showDatePicker() {
         // Get current date
@@ -981,7 +1097,7 @@ public class IssuesTickets extends AppCompatActivity {
 
         // Validate name badge organization
         if (!isValidNameBadgeOrg(namebadgeorg)) {
-            return "Name badge organization should not contain numbers or special characters";
+            return "Name badge organization should not contain special characters";
         }
 
         // Validate nationality
