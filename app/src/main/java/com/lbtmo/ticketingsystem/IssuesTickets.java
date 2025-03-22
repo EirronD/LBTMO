@@ -117,8 +117,8 @@ public class IssuesTickets extends AppCompatActivity {
 
     private TextView titleTextView; // Declare the TextView
 
-    private ViolationListAdapter adapter;
-    private List<ViolationListFetch> violationList;
+    private TicketViolationAdapter adapter;
+    private TicketViolation selectedViolation;
 
     private String selectedBarangayId = "";
     private String selectedStreetId;
@@ -284,17 +284,7 @@ public class IssuesTickets extends AppCompatActivity {
                     // Check if any required fields are empty (including those not covered by validateInputs)
                     Toast.makeText(IssuesTickets.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Get selected violation codes, titles, and ids from the adapter
-                    List<String> selectedViolationCodes = adapter.getSelectedViolationCodes();
-                    List<String> selectedViolationTitles = adapter.getSelectedViolationTitles();
-                    List<String> selectedViolationIds = new ArrayList<>();
 
-                    // Extract the IDs for the selected violations
-                    for (ViolationListFetch violation : violationList) {
-                        if (violation.isChecked()) {
-                            selectedViolationIds.add(violation.getId());
-                        }
-                    }
                     // Create an Intent to pass the data
                     Intent intent = new Intent(IssuesTickets.this, TicketViewing.class);
                     intent.putExtra("lastname", lastname);
@@ -316,11 +306,7 @@ public class IssuesTickets extends AppCompatActivity {
                     intent.putExtra("namebadgeorg", namebadgeorg);
                     intent.putExtra("nationality", nationality);
                     intent.putExtra("userKey", userKey);
-
-                    // Pass the selected violations (codes, titles, and ids)
-                    intent.putStringArrayListExtra("selectedViolationCodes", new ArrayList<>(selectedViolationCodes));
-                    intent.putStringArrayListExtra("selectedViolationTitles", new ArrayList<>(selectedViolationTitles));
-                    intent.putStringArrayListExtra("selectedViolationIds", new ArrayList<>(selectedViolationIds));
+                    intent.putExtra("selectedViolation", selectedViolation);
 
                     intent.putExtra("age", age);  // Use the global variable 'age'
 
@@ -481,9 +467,10 @@ public class IssuesTickets extends AppCompatActivity {
                 for (DataSnapshot offenseSnapshot : snapshot.getChildren()) {
                     String code = offenseSnapshot.child("CODE").getValue(String.class);
                     String title = offenseSnapshot.child("OFFENSE").getValue(String.class);
+                    String id = offenseSnapshot.getKey();
 
                     if (code != null && title != null) {
-                        violationList.add(new TicketViolation(code, title));
+                        violationList.add(new TicketViolation(id, code, title));
                     }
                 }
 
@@ -500,7 +487,17 @@ public class IssuesTickets extends AppCompatActivity {
 
         // Handle item selection from the dropdown
         selectViolation.setOnItemClickListener((parent, view, position, id) -> {
-            TicketViolation selectedViolation = violationList.get(position);
+            selectedViolation = violationList.get(position);
+
+            for (int i = 0; i < violationContainer.getChildCount(); i++) {
+                View child = violationContainer.getChildAt(i);
+                if (child instanceof LinearLayout) {
+                    TextView existingText = (TextView) ((LinearLayout) child).getChildAt(0);
+                    if (existingText.getText().toString().equals(selectedViolation.getCode() + " " + selectedViolation.getTitle())) {
+                        return; // Violation already exists, exit
+                    }
+                }
+            }
 
             // Create a new layout for the violation item (TextView + Delete Button)
             LinearLayout itemLayout = new LinearLayout(this);

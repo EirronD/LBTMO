@@ -1,14 +1,25 @@
 package com.lbtmo.ticketingsystem;
 
 import androidx.annotation.NonNull;
+import java.io.Serializable;
 
-public class TicketViolation {
+public class TicketViolation implements Serializable{
     private String code;
     private String title;
+    private String id;
 
-    public TicketViolation(String code, String title) {
+    public TicketViolation(String id, String code, String title) {
+        this.id = id;
         this.code = code;
         this.title = title;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCode() {

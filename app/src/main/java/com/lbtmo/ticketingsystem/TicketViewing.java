@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -98,36 +99,22 @@ public class TicketViewing extends AppCompatActivity {
 
         fetchUserData(userKey);
 
-        // Retrieve the selected violation codes and titles
-        ArrayList<String> selectedViolationCodes = intent.getStringArrayListExtra("selectedViolationCodes");
-        ArrayList<String> selectedViolationTitles = intent.getStringArrayListExtra("selectedViolationTitles");
-        ArrayList<String> selectedViolationIds = intent.getStringArrayListExtra("selectedViolationIds");
+        TicketViolation violation = (TicketViolation) getIntent().getSerializableExtra("selectedViolation");
 
-        // Prepare the violation text to display
-        StringBuilder violationText = new StringBuilder();
-        if (selectedViolationCodes != null && !selectedViolationCodes.isEmpty()) {
-            for (String violation : selectedViolationCodes) {
-                violationText.append(violation).append("\n");
-            }
-        } else {
-            violationText.append("N/A");
+        String code = "";
+        String title = "";
+        String id = "";
+
+        if (violation != null) {
+            code = violation.getCode();
+            title = violation.getTitle();
+            id = violation.getId();
         }
-        StringBuilder violationTitles = new StringBuilder();
-        if (selectedViolationTitles != null && !selectedViolationTitles.isEmpty()) {
-            for (String violation : selectedViolationTitles) {
-                violationTitles.append(violation).append("\n");
-            }
-        } else {
-            violationTitles.append("N/A");
-        }
-        StringBuilder violationId = new StringBuilder();
-        if (selectedViolationIds != null && !selectedViolationIds.isEmpty()) {
-            for (String violation : selectedViolationIds) {
-                violationId.append(violation).append("\n");
-            }
-        } else {
-            violationId.append("N/A");
-        }
+
+        String violationText = code.isEmpty() ? "N/A" : code;
+        String violationTitles = title.isEmpty() ? "N/A" : title;
+        String violationId = id.isEmpty() ? "N/A" : id;
+
 
         // Set the retrieved data to the TextView fields
         lastnameTv.setText(lastname != null ? lastname : "N/A");
@@ -180,6 +167,7 @@ public class TicketViewing extends AppCompatActivity {
 
                 // Navigate to HomeTicketer after successful ticket processing
                 Intent intent = new Intent(TicketViewing.this, HomeTicketer.class);
+                intent.putExtra("userKey", userKey);
                 startActivity(intent);
                 finish(); // Optional: Close the current activity to prevent returning back
             }
@@ -338,18 +326,24 @@ public class TicketViewing extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Failed to save ticket: " + e.getMessage(), Toast.LENGTH_LONG).show());
 
         DatabaseReference violationListRef = FirebaseDatabase.getInstance().getReference("tbl_violation_list");
-        ArrayList<String> selectedViolationIds = getIntent().getStringArrayListExtra("selectedViolationIds");
+        TicketViolation violation = (TicketViolation) getIntent().getSerializableExtra("selectedViolation");
+        String id = "";
 
-        if (selectedViolationIds != null) {
-            for (String offenseId : selectedViolationIds) {
-                Map<String, Object> offenseData = new HashMap<>();
-                offenseData.put("TICKET_NO", ticketId);
-                offenseData.put("OFFENSE_ID", offenseId);
-                offenseData.put("DRIVER_ID", driverId);
-
-                violationListRef.push().setValue(offenseData);
-            }
+        if (violation != null) {
+            id = violation.getId();
         }
+
+        String violationId = id.isEmpty() ? "N/A" : id;
+
+        if (!id.isEmpty()) {
+            Map<String, Object> offenseData = new HashMap<>();
+            offenseData.put("TICKET_NO", ticketId);
+            offenseData.put("OFFENSE_ID", id);
+            offenseData.put("DRIVER_ID", driverId);
+
+            violationListRef.push().setValue(offenseData);
+        }
+
     }
 
 
